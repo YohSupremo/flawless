@@ -1,0 +1,20 @@
+/* Motion tokens. Shared by /animate and /a11y. Animate opacity, transform, and clip-path only. */
+:root {
+  --dur-fast: 150ms;      /* hover, focus */
+  --dur: 400ms;           /* entrances, reveals */
+  --dur-slow: 600ms;      /* large image reveals; never longer than 700ms */
+  --ease: cubic-bezier(.22, .61, .36, 1);   /* decelerate, no overshoot */
+  --stagger: 80ms;        /* delay between siblings; never above 120ms */
+  --rise: 16px;           /* travel distance for slide-up entrances */
+}
+
+/* Required whenever any animation or transition exists. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,25 @@
+/* Base tokens. Every page starts from these names so commands can find and change them. */
+:root {
+  --base: #161616;
+  --surface: #1f1f1f;
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,.72);
+  --line: rgba(255,255,255,.28);
+  --accent: #f4502e;
+  --accent-ink: #161616;
+
+  --font-display: "Barlow Condensed", Impact, "Arial Narrow", sans-serif;
+  --font-body: "Barlow", system-ui, sans-serif;
+
+  --s1: 4px;  --s2: 8px;  --s3: 16px; --s4: 24px;
+  --s5: 32px; --s6: 48px; --s7: 64px; --s8: 96px;
+  --radius: 2px;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+h1, h2, h3 { text-wrap: balance; }  /* no single-word last line */
+body { margin: 0; background: var(--base); color: var(--text); font-family: var(--font-body); }

@@ -1,0 +1,58 @@
+{
+  "_comment": "Mirrors core/tokens/rules.json imagery. Rules.json is the source of truth; this file lists how /match uses them.",
+  "measure": [
+    "dominant_hue",
+    "shadow_color",
+    "mean_saturation"
+  ],
+  "checks": [
+    {
+      "id": "accent_hue",
+      "limit_key": "imagery.accent_hue_tolerance_deg",
+      "skip_if": "photo is neutral"
+    },
+    {
+      "id": "base_shadow",
+      "limit_key": "imagery.shadow_max_delta_e"
+    }
+  ],
+  "overlay": {
+    "color": "photo shadow",
+    "alpha_range": [
+      0.5,
+      0.6
+    ],
+    "gradient": false
+  },
+  "options_to_offer": 3,
+  "never": [
+    "css filter",
+    "blend mode over the photo",
+    "gradient",
+    "blur to hide edges"
+  ],
+  "modes": {
+    "palette_led": {
+      "fixed": "palette",
+      "adapts": "photo",
+      "tools": [
+        "grade_photo.py",
+        "swap photo"
+      ],
+      "strengths": {
+        "subtle": 0.6,
+        "standard": 0.85,
+        "full": 1.0
+      }
+    },
+    "photo_led": {
+      "fixed": "photo",
+      "adapts": "palette",
+      "tools": [
+        "image_harmony.py --suggest",
+        "/palette"
+      ]
+    }
+  },
+  "first_question": "Which stays as it is, the palette or the photo?"
+}

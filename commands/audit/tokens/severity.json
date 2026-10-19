@@ -1,0 +1,25 @@
+{
+  "_comment": "Maps audit findings to severity and to the command that fixes them.",
+  "findings": {
+    "gradient":            { "severity": "error",   "fix": "palette" },
+    "blue_violet_hue":     { "severity": "error",   "fix": "palette" },
+    "low_text_contrast":   { "severity": "error",   "fix": "palette" },
+    "low_marker_contrast": { "severity": "warning", "fix": "palette" },
+    "second_accent":       { "severity": "warning", "fix": "palette" },
+    "banned_symbol":       { "severity": "error",   "fix": "copy" },
+    "banned_word":         { "severity": "error",   "fix": "copy" },
+    "filler_text":         { "severity": "error",   "fix": "copy" },
+    "headline_too_long":   { "severity": "warning", "fix": "copy" },
+    "possible_invented_stat": { "severity": "warning", "fix": "copy" },
+    "spacing_off_scale":   { "severity": "error",   "fix": "edit" },
+    "hero_too_many_buttons": { "severity": "error", "fix": "edit" },
+    "pill_badge_tag":      { "severity": "error",   "fix": "edit" },
+    "repeated_grid":       { "severity": "warning", "fix": "section" },
+    "looping_animation":   { "severity": "error",   "fix": "edit" },
+    "glass_or_glow":       { "severity": "error",   "fix": "edit" },
+    "no_viewport_or_media_query": { "severity": "error", "fix": "mobile" },
+    "small_font":          { "severity": "warning", "fix": "mobile" },
+    "missing_lang_alt_focus": { "severity": "error", "fix": "a11y" },
+    "no_reduced_motion":   { "severity": "warning", "fix": "a11y" }
+  }
+}

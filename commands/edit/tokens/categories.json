@@ -1,0 +1,96 @@
+{
+  "categories": [
+    {
+      "id": "colors_fonts",
+      "label": "Colors and fonts",
+      "keywords": [
+        "color",
+        "colour",
+        "palette",
+        "accent",
+        "background",
+        "dark",
+        "light",
+        "font",
+        "typeface",
+        "typography"
+      ],
+      "routes_to": "palette",
+      "direct_tokens": [
+        "--font-display",
+        "--font-body"
+      ]
+    },
+    {
+      "id": "copy",
+      "label": "Copy",
+      "keywords": [
+        "headline",
+        "text",
+        "wording",
+        "button label",
+        "tagline",
+        "copy",
+        "shorter",
+        "rewrite"
+      ],
+      "routes_to": "copy"
+    },
+    {
+      "id": "layout_spacing",
+      "label": "Layout and spacing",
+      "keywords": [
+        "layout",
+        "spacing",
+        "padding",
+        "gap",
+        "section",
+        "order",
+        "align",
+        "columns",
+        "mobile"
+      ],
+      "routes_to": [
+        "section",
+        "mobile"
+      ]
+    },
+    {
+      "id": "components_images",
+      "label": "Components and images",
+      "keywords": [
+        "button",
+        "card",
+        "radius",
+        "corner",
+        "image",
+        "photo",
+        "illustration",
+        "animation",
+        "motion",
+        "hover",
+        "reveal",
+        "transition",
+        "match the image",
+        "photo colors"
+      ],
+      "routes_to": [
+        "animate",
+        "match"
+      ],
+      "direct_tokens": [
+        "--radius"
+      ],
+      "route_notes": {
+        "animate": "motion, animation, hover, reveal",
+        "match": "photo added or swapped, colors do not match the image"
+      }
+    }
+  ],
+  "category_question": {
+    "type": "multi_select",
+    "max_options": 4,
+    "prompt": "Which categories do you want to change?"
+  },
+  "followup_rounds": 1
+}

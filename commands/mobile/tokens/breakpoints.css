@@ -1,0 +1,13 @@
+/* Responsive snippets. Edit responsive rules only; never change desktop rules from /mobile. */
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; align-content: center; padding-top: var(--s6); padding-bottom: var(--s6); }
+  .hero img, .hero svg { order: -1; max-height: 40vh; }
+  h1 { font-size: clamp(40px, 11vw, 64px); }
+  .actions .btn { flex: 1 1 100%; text-align: center; }
+  .wrap { padding-left: 24px; padding-right: 24px; }
+  .sec { padding: var(--s6) 0; }
+  table, pre { display: block; overflow-x: auto; max-width: 100%; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+}

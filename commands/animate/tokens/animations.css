@@ -1,0 +1,34 @@
+/* Patterns for /animate. Requires the tokens in core/tokens/motion.css. Animate opacity, transform, clip-path only. */
+
+/* hero entrance: fade */
+.anim-fade   { animation: a-fade var(--dur) var(--ease) both; }
+/* hero entrance: slide up */
+.anim-rise   { animation: a-rise var(--dur) var(--ease) both; }
+/* mask reveal (left to right wipe) */
+.anim-wipe   { animation: a-wipe var(--dur-slow) var(--ease) both; }
+/* stagger siblings: add .stagger to the parent */
+.stagger > * { animation: a-rise var(--dur) var(--ease) both; }
+.stagger > *:nth-child(2) { animation-delay: calc(var(--stagger) * 1); }
+.stagger > *:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.stagger > *:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+
+@keyframes a-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes a-rise { from { opacity: 0; transform: translateY(var(--rise)); } to { opacity: 1; transform: none; } }
+@keyframes a-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* image motion: very slow settle, once */
+.anim-settle { animation: a-settle var(--dur-slow) var(--ease) both; }
+@keyframes a-settle { from { transform: scale(1.03); } to { transform: scale(1); } }
+
+/* scroll reveal: hidden only when JS has run (html.js), so content is visible without it */
+.js .reveal { opacity: 0; transform: translateY(var(--rise)); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* hover and focus: no glow, no shadow growth */
+.btn { transition: background-color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
+.btn:hover, .btn:focus-visible { transform: translateY(-1px); }
+.card { transition: transform var(--dur-fast) var(--ease); }
+.card:hover { transform: translateY(-2px); }
+.link-slide { position: relative; text-decoration: none; }
+.link-slide::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--dur-fast) var(--ease); }
+.link-slide:hover::after, .link-slide:focus-visible::after { transform: scaleX(1); }

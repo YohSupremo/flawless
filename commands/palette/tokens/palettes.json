@@ -1,0 +1,165 @@
+{
+  "_comment": "Verified with core/scripts/palette.py. Regenerate contrast values after any color change.",
+  "palettes": [
+    {
+      "id": "espresso-ember",
+      "name": "Espresso and ember",
+      "base": "#1b1410",
+      "text": "#f5efe4",
+      "accent": "#e8622f",
+      "accent_ink": "#1b1410",
+      "suits": [
+        "coffee",
+        "craft food",
+        "workshops"
+      ],
+      "contrast": {
+        "text_on_base": 15.9,
+        "accent_on_base": 5.39,
+        "button_text_on_accent": 5.39
+      }
+    },
+    {
+      "id": "charcoal-lime",
+      "name": "Charcoal and lime",
+      "base": "#101110",
+      "text": "#ffffff",
+      "accent": "#c8f031",
+      "accent_ink": "#101110",
+      "suits": [
+        "sport",
+        "fitness",
+        "climbing"
+      ],
+      "contrast": {
+        "text_on_base": 18.92,
+        "accent_on_base": 14.39,
+        "button_text_on_accent": 14.39
+      }
+    },
+    {
+      "id": "sand-terracotta",
+      "name": "Sand and terracotta",
+      "base": "#f1eadd",
+      "text": "#1f1a15",
+      "accent": "#c2441c",
+      "accent_ink": "#ffffff",
+      "suits": [
+        "food",
+        "home goods",
+        "studios"
+      ],
+      "contrast": {
+        "text_on_base": 14.43,
+        "accent_on_base": 4.24,
+        "button_text_on_accent": 5.08
+      }
+    },
+    {
+      "id": "forest-amber",
+      "name": "Forest and amber",
+      "base": "#0f1f17",
+      "text": "#f4f1e8",
+      "accent": "#e9b949",
+      "accent_ink": "#0f1f17",
+      "suits": [
+        "outdoors",
+        "travel",
+        "tools"
+      ],
+      "contrast": {
+        "text_on_base": 15.13,
+        "accent_on_base": 9.36,
+        "button_text_on_accent": 9.36
+      }
+    },
+    {
+      "id": "paper-red",
+      "name": "Paper and red",
+      "base": "#f7f5f0",
+      "text": "#151515",
+      "accent": "#d62828",
+      "accent_ink": "#ffffff",
+      "suits": [
+        "shops",
+        "media",
+        "services"
+      ],
+      "contrast": {
+        "text_on_base": 16.76,
+        "accent_on_base": 4.6,
+        "button_text_on_accent": 5.01
+      }
+    },
+    {
+      "id": "maroon-gold",
+      "name": "Maroon and gold",
+      "base": "#1e0f12",
+      "text": "#f7efe9",
+      "accent": "#f2a541",
+      "accent_ink": "#1e0f12",
+      "suits": [
+        "restaurants",
+        "events"
+      ],
+      "contrast": {
+        "text_on_base": 16.32,
+        "accent_on_base": 9.04,
+        "button_text_on_accent": 9.04
+      }
+    },
+    {
+      "id": "concrete-orange",
+      "name": "Concrete and orange",
+      "base": "#e4e2dd",
+      "text": "#121212",
+      "accent": "#d4380d",
+      "accent_ink": "#ffffff",
+      "suits": [
+        "automotive",
+        "hardware",
+        "builders"
+      ],
+      "contrast": {
+        "text_on_base": 14.47,
+        "accent_on_base": 3.71,
+        "button_text_on_accent": 4.8
+      }
+    },
+    {
+      "id": "teal-coral",
+      "name": "Deep teal and coral",
+      "base": "#0c1f22",
+      "text": "#eef5f4",
+      "accent": "#ff7a45",
+      "accent_ink": "#0c1f22",
+      "suits": [
+        "clinics",
+        "boats",
+        "water"
+      ],
+      "contrast": {
+        "text_on_base": 15.39,
+        "accent_on_base": 6.58,
+        "button_text_on_accent": 6.58
+      }
+    },
+    {
+      "id": "charcoal-ember",
+      "name": "Charcoal and ember",
+      "base": "#161616",
+      "text": "#ffffff",
+      "accent": "#f4502e",
+      "accent_ink": "#161616",
+      "suits": [
+        "motorcycles",
+        "garages"
+      ],
+      "contrast": {
+        "text_on_base": 18.1,
+        "accent_on_base": 5.2,
+        "button_text_on_accent": 5.2
+      }
+    }
+  ]
+}

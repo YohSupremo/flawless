@@ -1,0 +1,11 @@
+{
+  "required": [
+    { "key": "subject", "ask": "What is it, and what is it called?", "skip_if": "stated in the message" },
+    { "key": "action", "ask": "What should visitors do?", "options": ["Buy", "Book", "Visit", "Contact"], "skip_if": "stated or obvious" },
+    { "key": "colors", "ask": "Which colors?", "options": ["My own colors", "Show me three palettes", "Use the session scheme"], "skip_if": "session scheme exists or colors given" }
+  ],
+  "optional": [
+    { "key": "facts", "ask": "Do you have the real address, hours, or prices?", "note": "only if the page needs them" }
+  ],
+  "max_questions_per_round": 3
+}

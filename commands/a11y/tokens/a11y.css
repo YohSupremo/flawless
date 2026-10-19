@@ -1,0 +1,7 @@
+/* Fix snippets for /a11y. Use existing tokens. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+a:focus-visible, .btn:focus-visible { outline-color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

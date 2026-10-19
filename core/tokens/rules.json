@@ -1,0 +1,142 @@
+{
+  "_comment": "Single source of truth for thresholds. audit.py, palette.py, and the command docs read these values.",
+  "color": {
+    "banned_hue_min": 230,
+    "banned_hue_max": 300,
+    "banned_min_saturation": 0.15,
+    "max_accent_hues": 1,
+    "accent_area_target_percent": 5,
+    "gradients_allowed": false
+  },
+  "contrast": {
+    "text_min": 4.5,
+    "marker_min": 3.0,
+    "button_text_min": 4.5
+  },
+  "spacing_scale_px": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64,
+    96
+  ],
+  "hero": {
+    "max_headline_words": 8,
+    "max_headline_lines": 2,
+    "max_buttons": 2,
+    "max_paragraphs": 3
+  },
+  "section_padding_px": {
+    "desktop": 96,
+    "mobile": 48
+  },
+  "radius_px": {
+    "min": 0,
+    "max": 6
+  },
+  "mobile": {
+    "min_body_font_px": 16,
+    "min_font_px": 14,
+    "min_tap_target_px": 44,
+    "min_headline_px": 40
+  },
+  "banned_words": [
+    "elevate",
+    "unleash",
+    "reimagine",
+    "seamless",
+    "empower",
+    "journey",
+    "next-gen",
+    "next-generation",
+    "learn more",
+    "get started",
+    "where innovation",
+    "experience the difference",
+    "crafted for",
+    "cutting-edge",
+    "game-changer",
+    "revolutionize",
+    "unlock the"
+  ],
+  "filler_text": [
+    "lorem ipsum",
+    "sample copy",
+    "placeholder",
+    "your text here",
+    "tbd",
+    "coming soon",
+    "description goes here",
+    "insert "
+  ],
+  "banned_symbols": {
+    "/": "slash",
+    "·": "middle dot",
+    "•": "bullet",
+    "—": "em dash"
+  },
+  "imagery": {
+    "accent_hue_tolerance_deg": 45,
+    "neutral_photo_max_saturation": 0.1,
+    "note": "When a photo is on the page, the palette follows the photo. Used by core/scripts/image_harmony.py and /match.",
+    "shadow_max_delta_e": 6,
+    "hue_sample_saturation_band": [
+      0.1,
+      0.55
+    ]
+  },
+  "motion": {
+    "duration_ms": {
+      "min": 120,
+      "max": 700
+    },
+    "stagger_ms_max": 120,
+    "allowed_properties": [
+      "opacity",
+      "transform",
+      "clip-path"
+    ],
+    "banned_easings": [
+      "bounce",
+      "elastic",
+      "back"
+    ],
+    "max_entrance_per_element": 1,
+    "require_reduced_motion": true,
+    "banned_patterns": [
+      "infinite loop",
+      "parallax",
+      "floating",
+      "marquee",
+      "glow pulse",
+      "typewriter",
+      "confetti",
+      "gradient shimmer",
+      "auto-playing carousel"
+    ]
+  },
+  "eyebrow": {
+    "class_names": [
+      "eyebrow",
+      "kicker",
+      "overline",
+      "tagline"
+    ],
+    "allowed_per_page": 1,
+    "note": "Off by default. Allowed only when it carries information the headline lacks."
+  },
+  "warn_symbols": {
+    "&": "ampersand (fine inside a brand name, otherwise write 'and')"
+  },
+  "headline": {
+    "require_text_wrap_balance": true,
+    "no_orphan_last_line": true
+  }
+}

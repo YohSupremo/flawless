@@ -1,0 +1,13 @@
+{
+  "headline": [
+    { "id": "what_for", "pattern": "{Thing} for {who}.", "example": "Climbing for every level." },
+    { "id": "what_does", "pattern": "{Outcome}, {timing or place}.", "example": "Fresh roasted, shipped this week." },
+    { "id": "provable_claim", "pattern": "{Built or made} for {purpose}.", "example": "Built for the open road." }
+  ],
+  "supporting": { "max_words": 20, "adds": ["what is offered", "where", "how"], "never": "restate the headline in softer words" },
+  "buttons": {
+    "pattern": "{Verb} {object}",
+    "good": ["Shop coffee", "Book a day pass", "Visit our showroom", "See our walls", "Call the shop", "Get directions"],
+    "bad": ["Get started", "Learn more", "Discover", "Explore now", "Click here", "Submit"]
+  }
+}

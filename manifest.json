@@ -1,0 +1,562 @@
+{
+  "name": "clean-ui",
+  "version": "2.0",
+  "router": "SKILL.md",
+  "hooks": {
+    "pre": {
+      "snapshot": "python core/scripts/snapshot.py save <file>"
+    },
+    "post": {
+      "audit": "python core/scripts/audit.py <file> --a11y --mobile",
+      "state": "python core/scripts/state.py page <file> audit=<clean|errors>",
+      "report": "one or two sentences; in session mode end with an audit line"
+    }
+  },
+  "commands": {
+    "flawless": {
+      "description": "Turns the skill on for the whole conversation. `status` shows the session scheme and pages built; `off` turns it off",
+      "example": "`/flawless`, `/flawless status`, `/flawless off`",
+      "aliases": [],
+      "modifies_files": false,
+      "pre_hooks": [],
+      "post_hooks": [],
+      "reads": [
+        "core/rules.md",
+        "core/state.md",
+        "core/hooks.md",
+        "commands/flawless/references/session-mode.md",
+        "commands/flawless/tokens/session-template.json"
+      ],
+      "scripts": [
+        "core/scripts/state.py",
+        "core/scripts/palette.py"
+      ],
+      "calls": [
+        "palette"
+      ],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "active",
+        "scheme",
+        "pages"
+      ],
+      "state_writes": [
+        "active",
+        "scheme"
+      ],
+      "folder": "commands/flawless"
+    },
+    "flawless-c": {
+      "description": "Lists every command with its description",
+      "example": "`/flawless-c`",
+      "aliases": [
+        "help"
+      ],
+      "modifies_files": false,
+      "pre_hooks": [],
+      "post_hooks": [],
+      "reads": [
+        "commands/flawless-c/references/usage.md",
+        "commands/flawless-c/tokens/command-table.md"
+      ],
+      "scripts": [],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [],
+      "state_writes": [],
+      "folder": "commands/flawless-c"
+    },
+    "new": {
+      "description": "Builds a page from scratch. Asks only for what is missing, then a palette choice",
+      "example": "`/new landing page for a bike workshop`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/workflow.md",
+        "core/delivery.md",
+        "core/tokens/base.css",
+        "core/tokens/rules.json",
+        "core/hooks.md",
+        "core/state.md",
+        "commands/new/references/type-pairings.md",
+        "commands/new/references/torque-hero-notes.md",
+        "commands/new/tokens/hero.html",
+        "commands/new/tokens/intake.json",
+        "core/tokens/motion.css"
+      ],
+      "scripts": [
+        "core/scripts/audit.py",
+        "core/scripts/palette.py",
+        "core/scripts/state.py",
+        "core/scripts/snapshot.py",
+        "core/scripts/image_harmony.py"
+      ],
+      "calls": [
+        "palette",
+        "copy",
+        "section",
+        "match"
+      ],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "active",
+        "scheme"
+      ],
+      "state_writes": [
+        "scheme",
+        "pages"
+      ],
+      "folder": "commands/new"
+    },
+    "edit": {
+      "description": "Changes an existing page and keeps its scheme. With no change described, asks which category to change",
+      "example": "`/edit make the headline shorter`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "core/hooks.md",
+        "core/state.md",
+        "commands/edit/references/categories.md",
+        "commands/edit/references/edit-examples.md",
+        "commands/edit/tokens/categories.json"
+      ],
+      "scripts": [
+        "core/scripts/audit.py",
+        "core/scripts/snapshot.py",
+        "core/scripts/state.py"
+      ],
+      "calls": [
+        "palette",
+        "copy",
+        "section",
+        "mobile",
+        "animate",
+        "match"
+      ],
+      "hands_off_to": [
+        "revert"
+      ],
+      "requires": [],
+      "state_reads": [
+        "active",
+        "scheme",
+        "pages"
+      ],
+      "state_writes": [
+        "scheme",
+        "pages"
+      ],
+      "folder": "commands/edit"
+    },
+    "audit": {
+      "description": "Checks a page against every rule and reports errors and warnings. Asks before fixing",
+      "example": "`/audit the coffee page`",
+      "aliases": [],
+      "modifies_files": false,
+      "pre_hooks": [],
+      "post_hooks": [],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "core/hooks.md",
+        "commands/audit/references/slop-audit.md",
+        "commands/audit/references/report-format.md",
+        "commands/audit/tokens/severity.json"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [],
+      "hands_off_to": [
+        "palette",
+        "copy",
+        "edit",
+        "mobile",
+        "a11y"
+      ],
+      "requires": [],
+      "state_reads": [
+        "scheme",
+        "pages"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/audit"
+    },
+    "palette": {
+      "description": "Shows compliant palettes with contrast values and applies your pick to the color tokens",
+      "example": "`/palette warmer accent`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "core/state.md",
+        "commands/palette/references/palettes.md",
+        "commands/palette/references/palette-rules.md",
+        "commands/palette/tokens/palettes.json"
+      ],
+      "scripts": [
+        "core/scripts/palette.py",
+        "core/scripts/state.py",
+        "core/scripts/image_harmony.py"
+      ],
+      "calls": [],
+      "hands_off_to": [
+        "match"
+      ],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "scheme"
+      ],
+      "folder": "commands/palette"
+    },
+    "copy": {
+      "description": "Offers three plain rewrites of the headline, supporting text, buttons, or a section",
+      "example": "`/copy headline`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "commands/copy/references/copy.md",
+        "commands/copy/references/rewrites.md",
+        "commands/copy/tokens/formulas.json"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/copy"
+    },
+    "section": {
+      "description": "Adds a section from the pattern library, with a layout different from its neighbors",
+      "example": "`/section how it works`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/base.css",
+        "core/tokens/rules.json",
+        "commands/section/references/sections.md",
+        "commands/section/tokens/layouts.css"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [
+        "copy",
+        "mobile"
+      ],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/section"
+    },
+    "match": {
+      "description": "Makes the palette and photo agree: grades or swaps the photo to your palette, or takes the palette from a photo you must keep",
+      "example": "`/match`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "core/state.md",
+        "commands/match/references/harmony-rules.md",
+        "commands/match/tokens/harmony.json"
+      ],
+      "scripts": [
+        "core/scripts/image_harmony.py",
+        "core/scripts/palette.py",
+        "core/scripts/state.py",
+        "core/scripts/grade_photo.py"
+      ],
+      "calls": [
+        "palette"
+      ],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "scheme"
+      ],
+      "folder": "commands/match"
+    },
+    "animate": {
+      "description": "Adds restrained motion after asking what kind: entrance, scroll reveal, hover, or image motion",
+      "example": "`/animate hero entrance`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "core/tokens/motion.css",
+        "commands/animate/references/motion-catalog.md",
+        "commands/animate/tokens/animations.css",
+        "commands/animate/tokens/scroll-reveal.js"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/animate"
+    },
+    "mobile": {
+      "description": "Checks and fixes the phone layout",
+      "example": "`/mobile`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "commands/mobile/references/mobile-checklist.md",
+        "commands/mobile/tokens/breakpoints.css"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/mobile"
+    },
+    "ref": {
+      "description": "Reads the idea behind a reference image and builds something new, keeping your current palette",
+      "example": "`/ref` with an image attached",
+      "aliases": [],
+      "modifies_files": false,
+      "pre_hooks": [],
+      "post_hooks": [],
+      "reads": [
+        "core/rules.md",
+        "core/state.md",
+        "commands/ref/references/ref-analysis.md",
+        "commands/ref/tokens/brief-template.md"
+      ],
+      "scripts": [
+        "core/scripts/analyze_layout.py",
+        "core/scripts/extract_palette.py",
+        "core/scripts/audit.py",
+        "core/scripts/image_harmony.py"
+      ],
+      "calls": [
+        "palette",
+        "copy",
+        "match"
+      ],
+      "hands_off_to": [
+        "new",
+        "edit"
+      ],
+      "requires": [],
+      "state_reads": [
+        "active",
+        "scheme",
+        "pages"
+      ],
+      "state_writes": [],
+      "folder": "commands/ref"
+    },
+    "a11y": {
+      "description": "Checks contrast, language, alt text, focus styles, and reduced motion",
+      "example": "`/a11y`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/rules.md",
+        "core/tokens/rules.json",
+        "commands/a11y/references/a11y-checklist.md",
+        "commands/a11y/tokens/a11y.css",
+        "core/tokens/motion.css"
+      ],
+      "scripts": [
+        "core/scripts/audit.py"
+      ],
+      "calls": [],
+      "hands_off_to": [
+        "palette"
+      ],
+      "requires": [],
+      "state_reads": [
+        "scheme"
+      ],
+      "state_writes": [
+        "pages"
+      ],
+      "folder": "commands/a11y"
+    },
+    "history": {
+      "description": "Lists the saved versions of a page",
+      "example": "`/history`",
+      "aliases": [],
+      "modifies_files": false,
+      "pre_hooks": [],
+      "post_hooks": [],
+      "reads": [
+        "core/hooks.md",
+        "commands/history/references/versioning.md",
+        "commands/history/tokens/history-format.md"
+      ],
+      "scripts": [
+        "core/scripts/snapshot.py"
+      ],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [],
+      "state_reads": [
+        "pages"
+      ],
+      "state_writes": [],
+      "folder": "commands/history"
+    },
+    "revert": {
+      "description": "Restores the previous version, or a numbered one",
+      "example": "`/revert`, `/revert 2`",
+      "aliases": [],
+      "modifies_files": true,
+      "pre_hooks": [
+        "snapshot"
+      ],
+      "post_hooks": [
+        "audit",
+        "state",
+        "report"
+      ],
+      "reads": [
+        "core/hooks.md",
+        "core/state.md",
+        "commands/revert/references/restore-rules.md",
+        "commands/revert/tokens/revert-message.md"
+      ],
+      "scripts": [
+        "core/scripts/snapshot.py",
+        "core/scripts/state.py"
+      ],
+      "calls": [],
+      "hands_off_to": [],
+      "requires": [
+        "history"
+      ],
+      "state_reads": [
+        "pages",
+        "scheme"
+      ],
+      "state_writes": [
+        "scheme",
+        "pages"
+      ],
+      "folder": "commands/revert"
+    }
+  }
+}

@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/hooks.md`, `core/state.md`, `commands/edit/references/categories.md`, `commands/edit/references/edit-examples.md`, `commands/edit/tokens/categories.json` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/hooks.md`, `core/state.md`, `commands/edit/references/categories.md`, `commands/edit/references/edit-examples.md`, `commands/edit/tokens/categories.json`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py`, `core/scripts/snapshot.py`, `core/scripts/state.py` |
 | Calls | `/palette`, `/copy`, `/section`, `/mobile`, `/animate`, `/match` |
 | Called by | none |
@@ -56,6 +56,10 @@ The page the user names, links, attaches, or has been working on. If more than o
 ## Scheme changes
 
 If the user asks for a scheme change ("/edit new accent color"), treat it as the request. Pick values under the color rules (via `/palette`), change `:root` tokens only, update the session scheme in state, and confirm what moved.
+
+## Preview mode
+
+`/edit --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

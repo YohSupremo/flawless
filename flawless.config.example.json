@@ -1,0 +1,11 @@
+{
+  "_comment": "Copy to flawless.config.json next to your pages (or a parent folder). See docs/configuration.md.",
+  "mode": "balanced",
+  "brand_colors": ["#6d28d9"],
+  "accessibility_target": "AA",
+  "max_headline_words": 10,
+  "typography": { "display": "Fraunces", "body": "Inter" },
+  "allowed_frameworks": ["html"],
+  "content_tone": "plain, warm, direct",
+  "page_type": "ecommerce"
+}

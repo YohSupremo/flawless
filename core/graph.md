@@ -1,3 +1,5 @@
+<!-- GENERATED FILE. Do not edit by hand: edit manifest.json (or the token file named below), then run python core/scripts/build.py. CI fails if this file is out of date. -->
+
 # Command graph
 
 Generated from `manifest.json`. Solid arrows are calls (one command runs another). Dashed arrows are hand-offs (control passes after the user decides). `requires` means the other command's data must exist.

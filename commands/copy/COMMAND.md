@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/copy/references/copy.md`, `commands/copy/references/rewrites.md`, `commands/copy/tokens/formulas.json` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/copy/references/copy.md`, `commands/copy/references/rewrites.md`, `commands/copy/tokens/formulas.json`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py` |
 | Calls | none |
 | Called by | `/edit`, `/new`, `/ref`, `/section` |
@@ -46,6 +46,10 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 ## Voice
 
 Say what it is and who it is for, in words a customer uses. Short sentences. No metaphors standing in for the product. No second pitch in the supporting sentence. Brand name appears once, small, above the headline.
+
+## Preview mode
+
+`/copy --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

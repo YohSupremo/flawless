@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.history/
+.flawless-state.json
+.flawless-state.json.corrupt
+*.lock

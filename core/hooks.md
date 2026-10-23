@@ -33,3 +33,7 @@ One or two sentences saying what changed. In session mode (`active` is true), en
 ## Order
 
 pre: snapshot, then the command's own steps, then post: audit, state, report.
+
+## Preview runs
+
+A command run with `--preview` skips every hook and changes nothing. See `core/preview.md`.

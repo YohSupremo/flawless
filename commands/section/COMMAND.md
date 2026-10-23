@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/base.css`, `core/tokens/rules.json`, `commands/section/references/sections.md`, `commands/section/tokens/layouts.css` |
+| Reads | `core/rules.md`, `core/tokens/base.css`, `core/tokens/rules.json`, `commands/section/references/sections.md`, `commands/section/tokens/layouts.css`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py` |
 | Calls | `/copy`, `/mobile` |
 | Called by | `/edit`, `/new` |
@@ -48,6 +48,10 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 ## Never add
 
 Stat strips, "trusted by" rows, six-tile icon grids, unrequested newsletter bars, scroll indicators, floating cards, "why choose us" blocks, a closing banner that repeats the hero.
+
+## Preview mode
+
+`/section --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

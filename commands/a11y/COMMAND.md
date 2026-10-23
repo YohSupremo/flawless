@@ -21,7 +21,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/a11y/references/a11y-checklist.md`, `commands/a11y/tokens/a11y.css`, `core/tokens/motion.css` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/a11y/references/a11y-checklist.md`, `commands/a11y/tokens/a11y.css`, `core/tokens/motion.css`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py` |
 | Calls | none |
 | Called by | none |
@@ -45,6 +45,10 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 - Never remove a focus outline without adding `:focus-visible`.
 - Never fix contrast by adding a gradient or a glow; change the color value.
 - Decorative SVGs get `aria-hidden="true"`; meaningful ones get `role="img"` and `aria-label`.
+
+## Preview mode
+
+`/a11y --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

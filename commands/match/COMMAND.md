@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/state.md`, `commands/match/references/harmony-rules.md`, `commands/match/tokens/harmony.json` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/state.md`, `commands/match/references/harmony-rules.md`, `commands/match/tokens/harmony.json`, `core/preview.md` |
 | Scripts | `core/scripts/image_harmony.py`, `core/scripts/palette.py`, `core/scripts/state.py`, `core/scripts/grade_photo.py` |
 | Calls | `/palette` |
 | Called by | `/edit`, `/new`, `/ref` |
@@ -64,6 +64,10 @@ If the message does not say, ask one question: "Which stays as it is, the palett
 - A flat overlay is allowed; tint it with the base color (palette-led) or the photo's shadow color (photo-led).
 - A neutral (gray) photo accepts any accent outside the banned hues; only the base is matched.
 - Do not change fonts, copy, or layout. Palette-led never recolors the page; photo-led never recolors the photo.
+
+## Preview mode
+
+`/match --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

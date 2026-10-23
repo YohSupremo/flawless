@@ -1,5 +1,7 @@
 {
   "name": "clean-ui",
+  "display_name": "Flawless",
+  "identifier_note": "\"clean-ui\" is the internal skill identifier (SKILL.md name, historical state file names). The public name is Flawless. See docs/naming.md.",
   "version": "2.0",
   "router": "SKILL.md",
   "hooks": {
@@ -45,7 +47,19 @@
         "active",
         "scheme"
       ],
-      "folder": "commands/flawless"
+      "folder": "commands/flawless",
+      "needs_target": false,
+      "confirms": false,
+      "supports_preview": false,
+      "output": "Session status: on or off, scheme, pages built",
+      "common_failures": [
+        "State file missing: rebuild with state.py init --scheme-from <page>"
+      ],
+      "related": [
+        "flawless-c",
+        "new",
+        "edit"
+      ]
     },
     "flawless-c": {
       "description": "Lists every command with its description",
@@ -66,7 +80,17 @@
       "requires": [],
       "state_reads": [],
       "state_writes": [],
-      "folder": "commands/flawless-c"
+      "folder": "commands/flawless-c",
+      "needs_target": false,
+      "confirms": false,
+      "supports_preview": false,
+      "output": "Table of every command with description, example, and details",
+      "common_failures": [
+        "Unknown command typed: this list is shown"
+      ],
+      "related": [
+        "flawless"
+      ]
     },
     "new": {
       "description": "Builds a page from scratch. Asks only for what is missing, then a palette choice",
@@ -118,7 +142,20 @@
         "scheme",
         "pages"
       ],
-      "folder": "commands/new"
+      "folder": "commands/new",
+      "needs_target": false,
+      "confirms": false,
+      "supports_preview": false,
+      "output": "One self-contained HTML file and a one-line audit result",
+      "common_failures": [
+        "Brief names no purpose: asks one question round",
+        "Rule conflict with the brief: asks keep or override once"
+      ],
+      "related": [
+        "edit",
+        "palette",
+        "audit"
+      ]
     },
     "edit": {
       "description": "Changes an existing page and keeps its scheme. With no change described, asks which category to change",
@@ -140,7 +177,8 @@
         "core/state.md",
         "commands/edit/references/categories.md",
         "commands/edit/references/edit-examples.md",
-        "commands/edit/tokens/categories.json"
+        "commands/edit/tokens/categories.json",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py",
@@ -168,7 +206,20 @@
         "scheme",
         "pages"
       ],
-      "folder": "commands/edit"
+      "folder": "commands/edit",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "Changed page, one or two sentences, audit line",
+      "common_failures": [
+        "More than one page could match: asks which",
+        "Change would alter the scheme: asks before doing it"
+      ],
+      "related": [
+        "revert",
+        "history",
+        "audit"
+      ]
     },
     "audit": {
       "description": "Checks a page against every rule and reports errors and warnings. Asks before fixing",
@@ -204,7 +255,20 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/audit"
+      "folder": "commands/audit",
+      "needs_target": true,
+      "confirms": true,
+      "supports_preview": false,
+      "output": "Report in three groups (errors, warnings, passes) then one fix question",
+      "common_failures": [
+        "External stylesheet: CSS not readable, markup only",
+        "Rule overridden earlier: listed as overridden"
+      ],
+      "related": [
+        "a11y",
+        "mobile",
+        "edit"
+      ]
     },
     "palette": {
       "description": "Shows compliant palettes with contrast values and applies your pick to the color tokens",
@@ -225,7 +289,8 @@
         "core/state.md",
         "commands/palette/references/palettes.md",
         "commands/palette/references/palette-rules.md",
-        "commands/palette/tokens/palettes.json"
+        "commands/palette/tokens/palettes.json",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/palette.py",
@@ -243,7 +308,18 @@
       "state_writes": [
         "scheme"
       ],
-      "folder": "commands/palette"
+      "folder": "commands/palette",
+      "needs_target": false,
+      "confirms": true,
+      "supports_preview": true,
+      "output": "Palette choice with contrast figures, applied to the page when one is named",
+      "common_failures": [
+        "Requested color fails contrast or sits in the banned hue range: offers the nearest passing color"
+      ],
+      "related": [
+        "match",
+        "edit"
+      ]
     },
     "copy": {
       "description": "Offers three plain rewrites of the headline, supporting text, buttons, or a section",
@@ -263,7 +339,8 @@
         "core/tokens/rules.json",
         "commands/copy/references/copy.md",
         "commands/copy/references/rewrites.md",
-        "commands/copy/tokens/formulas.json"
+        "commands/copy/tokens/formulas.json",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py"
@@ -277,7 +354,18 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/copy"
+      "folder": "commands/copy",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "Plain rewrite options for the named copy",
+      "common_failures": [
+        "Facts missing: asks rather than inventing them"
+      ],
+      "related": [
+        "edit",
+        "audit"
+      ]
     },
     "section": {
       "description": "Adds a section from the pattern library, with a layout different from its neighbors",
@@ -297,7 +385,8 @@
         "core/tokens/base.css",
         "core/tokens/rules.json",
         "commands/section/references/sections.md",
-        "commands/section/tokens/layouts.css"
+        "commands/section/tokens/layouts.css",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py"
@@ -314,7 +403,19 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/section"
+      "folder": "commands/section",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "New section added from the pattern library, audit line",
+      "common_failures": [
+        "No existing page: hands off to /new",
+        "Same layout as the section above: picks another"
+      ],
+      "related": [
+        "new",
+        "edit"
+      ]
     },
     "match": {
       "description": "Makes the palette and photo agree: grades or swaps the photo to your palette, or takes the palette from a photo you must keep",
@@ -334,7 +435,8 @@
         "core/tokens/rules.json",
         "core/state.md",
         "commands/match/references/harmony-rules.md",
-        "commands/match/tokens/harmony.json"
+        "commands/match/tokens/harmony.json",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/image_harmony.py",
@@ -353,7 +455,19 @@
       "state_writes": [
         "scheme"
       ],
-      "folder": "commands/match"
+      "folder": "commands/match",
+      "needs_target": true,
+      "confirms": true,
+      "supports_preview": true,
+      "output": "Photo graded or palette adapted so they agree, with the choice made explicit",
+      "common_failures": [
+        "No photo on the page: nothing to match",
+        "Pillow missing for the image scripts"
+      ],
+      "related": [
+        "palette",
+        "new"
+      ]
     },
     "animate": {
       "description": "Adds restrained motion after asking what kind: entrance, scroll reveal, hover, or image motion",
@@ -374,7 +488,8 @@
         "core/tokens/motion.css",
         "commands/animate/references/motion-catalog.md",
         "commands/animate/tokens/animations.css",
-        "commands/animate/tokens/scroll-reveal.js"
+        "commands/animate/tokens/scroll-reveal.js",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py"
@@ -388,7 +503,18 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/animate"
+      "folder": "commands/animate",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "Restrained entrance, scroll, hover or image motion added, audit line",
+      "common_failures": [
+        "Request for looping or parallax motion: refused with an alternative"
+      ],
+      "related": [
+        "edit",
+        "a11y"
+      ]
     },
     "mobile": {
       "description": "Checks and fixes the phone layout",
@@ -407,7 +533,8 @@
         "core/rules.md",
         "core/tokens/rules.json",
         "commands/mobile/references/mobile-checklist.md",
-        "commands/mobile/tokens/breakpoints.css"
+        "commands/mobile/tokens/breakpoints.css",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py"
@@ -421,7 +548,19 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/mobile"
+      "folder": "commands/mobile",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "Phone layout checked and fixed, list of what changed",
+      "common_failures": [
+        "No viewport meta tag: added",
+        "Cannot render the page: static checks only"
+      ],
+      "related": [
+        "a11y",
+        "audit"
+      ]
     },
     "ref": {
       "description": "Reads the idea behind a reference image and builds something new, keeping your current palette",
@@ -458,7 +597,19 @@
         "pages"
       ],
       "state_writes": [],
-      "folder": "commands/ref"
+      "folder": "commands/ref",
+      "needs_target": false,
+      "confirms": true,
+      "supports_preview": false,
+      "output": "Reference analysis and a new, original direction brief",
+      "common_failures": [
+        "No image attached: asks for one",
+        "Pillow missing for palette extraction"
+      ],
+      "related": [
+        "new",
+        "edit"
+      ]
     },
     "a11y": {
       "description": "Checks contrast, language, alt text, focus styles, and reduced motion",
@@ -478,7 +629,8 @@
         "core/tokens/rules.json",
         "commands/a11y/references/a11y-checklist.md",
         "commands/a11y/tokens/a11y.css",
-        "core/tokens/motion.css"
+        "core/tokens/motion.css",
+        "core/preview.md"
       ],
       "scripts": [
         "core/scripts/audit.py"
@@ -494,7 +646,18 @@
       "state_writes": [
         "pages"
       ],
-      "folder": "commands/a11y"
+      "folder": "commands/a11y",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": true,
+      "output": "Contrast, alt text, focus, language and reduced-motion checks with fixes",
+      "common_failures": [
+        "Contrast failure caused by a user-chosen color: asks before changing it"
+      ],
+      "related": [
+        "mobile",
+        "audit"
+      ]
     },
     "history": {
       "description": "Lists the saved versions of a page",
@@ -518,7 +681,18 @@
         "pages"
       ],
       "state_writes": [],
-      "folder": "commands/history"
+      "folder": "commands/history",
+      "needs_target": true,
+      "confirms": false,
+      "supports_preview": false,
+      "output": "List of saved versions of the page",
+      "common_failures": [
+        "No versions saved yet: says so"
+      ],
+      "related": [
+        "revert",
+        "edit"
+      ]
     },
     "revert": {
       "description": "Restores the previous version, or a numbered one",
@@ -556,7 +730,18 @@
         "scheme",
         "pages"
       ],
-      "folder": "commands/revert"
+      "folder": "commands/revert",
+      "needs_target": true,
+      "confirms": true,
+      "supports_preview": false,
+      "output": "Page restored to the chosen version; the replaced version is saved first",
+      "common_failures": [
+        "Version number not found: lists the available ones"
+      ],
+      "related": [
+        "history",
+        "edit"
+      ]
     }
   }
 }

@@ -11,6 +11,10 @@ Flawless is an agent skill for building web interfaces that feel deliberate, rea
 
 Flawless is a collection of skill instructions, command references, design tokens, and Python validation scripts. It is not a web framework and does not ship a runtime application.
 
+![A Flawless landing page on phone and desktop](./examples/screenshots/landing.phone.png)
+
+See the [`examples/`](./examples) folder for a complete landing page, pages before and after `/audit`, phone and accessibility fixes, command transcripts, and screenshots.
+
 ## Who this is for
 
 Use Flawless when you want an AI coding assistant to:
@@ -25,7 +29,7 @@ The skill works best with an agent environment that supports skill files, slash 
 
 ## Getting started
 
-1. Make this directory available to your agent as a skill.
+1. Make this directory available to your agent as a skill. Where it goes, which agents work, dependencies, and state storage are in [`INSTALL.md`](./INSTALL.md).
 2. Use [`SKILL.md`](./SKILL.md) as the skill entry point.
 3. Start with a command at the beginning of a message:
 
@@ -61,7 +65,12 @@ Then ask for ordinary UI work. Flawless will route new work to `/new` and change
 | `/history` | List saved page versions | `/history` |
 | `/revert` | Restore a previous page version | `/revert 2` |
 
-Commands are case-insensitive. `/help` is an alias for `/flawless-c`.
+Commands are case-insensitive. `/help` is an alias for `/flawless-c` and also shows, for each command, whether it changes files, needs a page, asks to confirm, supports preview, what it typically outputs, and how it commonly fails.
+
+Two options worth knowing:
+
+- `--preview` on `/edit`, `/palette`, `/copy`, `/section`, `/match`, `/animate`, `/mobile`, and `/a11y` shows the proposed change and its audit result without writing anything ([`core/preview.md`](./core/preview.md)).
+- `/audit --explain` adds the design principle and a suggested fix under each finding.
 
 ## Typical workflow
 
@@ -105,7 +114,9 @@ The shared rules in [`core/rules.md`](./core/rules.md) and thresholds in [`core/
 - Copy that avoids filler, unsupported claims, and stock phrases
 - Visual patterns that commonly make generated UI feel generic
 
-The design rules are defaults, not a substitute for the user’s brand. If a request intentionally breaks a rule, the agent should make that override explicit rather than changing it silently.
+What the audit checks automatically, what it only guesses, and what needs a human is listed in [`docs/audit-coverage.md`](./docs/audit-coverage.md).
+
+The design rules are defaults, not a substitute for the user’s brand. A project can set a strictness mode (`strict`, `balanced`, `brand-first`), brand colors, and an accessibility target in `flawless.config.json` ([`docs/configuration.md`](./docs/configuration.md)). If a request intentionally breaks a rule, the agent should make that override explicit rather than changing it silently.
 
 ## Output expectations
 
@@ -122,27 +133,35 @@ When content is illustrative, the agent should identify which content is sample 
 ## Repository layout
 
 ```text
-SKILL.md                 Skill router and shared behavior
+SKILL.md                 Skill router and shared behavior (internal name: clean-ui, see docs/naming.md)
 manifest.json            Source of truth for commands and wiring
+INSTALL.md               Installation, dependencies, state storage
+docs/                    Audit coverage, configuration, CSS support, browser checks, framework,
+                         content, i18n, and color-vision guidance
+examples/                Sample pages, before and after, transcripts, screenshots
+tests/                   Unit tests and good and bad HTML fixtures
 commands/<name>/         Command instructions, references, and tokens
 core/rules.md            Shared design rules
 core/workflow.md         Page-building workflow
 core/hooks.md            Snapshot, audit, state, and reporting hooks
 core/state.md            Session scheme and page state
 core/tokens/             Shared CSS and threshold tokens
-core/scripts/             Audit, palette, state, snapshot, and build tools
+core/scripts/            Audit, palette, state, snapshot, build, validate, and browser-check tools
 ```
 
 The command table and command wiring blocks are generated from `manifest.json`. Edit the manifest when adding or changing a command, rather than editing generated sections by hand.
 
 ## Development and validation
 
-The scripts require Python 3. From the repository root, regenerate derived documentation and validate the skill:
+The scripts require Python 3.9 or newer and only the standard library (Pillow for the image tools, Playwright for the optional browser check). From the repository root:
 
 ```text
-python core/scripts/build.py
-python core/scripts/validate.py
+python core/scripts/build.py                  regenerate derived files
+python core/scripts/validate.py               check structure, links, hooks, generated files
+python -m unittest discover -s tests          run the tests
 ```
+
+GitHub Actions ([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)) runs all three on every push and pull request, fails if generated files are out of date, and audits the example pages.
 
 `validate.py` checks the command structure, referenced files, command relationships, generated files, router coverage, token files, palettes, and Markdown path references.
 
@@ -150,10 +169,19 @@ For a page that has been changed, run the page audit with accessibility and mobi
 
 ```text
 python core/scripts/audit.py path/to/page.html --a11y --mobile
+python core/scripts/audit.py path/to/page.html --a11y --mobile --explain
 ```
 
-When changing command metadata or wiring, update [`manifest.json`](./manifest.json), run the build script, then run the validator. Keep generated files such as [`core/graph.md`](./core/graph.md) and [`commands/flawless-c/tokens/command-table.md`](./commands/flawless-c/tokens/command-table.md) in sync.
+Optional, with Playwright installed: `python core/scripts/browser_check.py path/to/page.html` checks overflow, tap targets, keyboard focus, and reduced motion in a real browser ([`docs/browser-checks.md`](./docs/browser-checks.md)).
+
+### Generated files
+
+Files generated from `manifest.json` begin with a "GENERATED FILE" notice (or a generated-from line inside the wiring block of each `COMMAND.md`). Do not edit them by hand. When changing command metadata or wiring, edit [`manifest.json`](./manifest.json), run the build script, then the validator. The generated files are [`core/graph.md`](./core/graph.md), [`commands/flawless-c/tokens/command-table.md`](./commands/flawless-c/tokens/command-table.md), [`commands/palette/references/palettes.md`](./commands/palette/references/palettes.md), and the wiring block in each `COMMAND.md`.
+
+### Adding tests
+
+Add a page to `tests/fixtures/bad/` that breaks one rule, list the findings it must produce in `tests/fixtures/expected.json`, and run the suite. Good pages go in `tests/fixtures/good/` and must stay free of findings.
 
 ## License
 
-No license file is currently included in this repository. Add one before distributing Flawless outside your own projects.
+[MIT](./LICENSE).

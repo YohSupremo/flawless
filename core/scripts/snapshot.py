@@ -26,10 +26,19 @@ def save(p):
     shutil.copy2(p, os.path.join(d, f"v{v}.html"))
     return v
 
+
+def restore_file(p, n):
+    """Copy version n over the page through a temp file, so an interrupted restore never leaves half a page."""
+    tmp = p + ".restore.tmp"
+    shutil.copy2(os.path.join(hist_dir(p), f"v{n}.html"), tmp)
+    os.replace(tmp, p)
+
 def main(a):
     if len(a) < 2:
         sys.exit(__doc__)
     cmd, p = a[0], a[1]
+    if cmd in ("save", "restore") and not os.path.isfile(p):
+        sys.exit(f"page not found: {p}")
     if cmd == "save":
         print(f"saved v{save(p)}")
     elif cmd == "list":
@@ -43,7 +52,7 @@ def main(a):
         if n not in vs:
             sys.exit(f"v{n} not found")
         save(p)
-        shutil.copy2(os.path.join(hist_dir(p), f"v{n}.html"), p)
+        restore_file(p, n)
         print(f"restored v{n}")
     else:
         sys.exit(__doc__)

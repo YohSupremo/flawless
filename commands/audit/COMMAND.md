@@ -36,11 +36,15 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 ## Steps
 
 1. **Target.** Resolve the page as in `/edit`. If more than one could match, ask which.
-2. **Automated pass.** `python core/scripts/audit.py <file> --a11y --mobile`. It reports the current scheme, errors (hard rules), and warnings (judgment calls). Thresholds come from `core/tokens/rules.json`.
+2. **Automated pass.** `python core/scripts/audit.py <file> --a11y --mobile`. Add `--explain` when the user asks why a rule applies (`/audit --explain`): each finding then carries its design principle and a suggested fix. It reports the current scheme, errors (hard rules), and warnings (judgment calls). Thresholds come from `core/tokens/rules.json`.
 3. **Judgment pass.** Walk `commands/audit/references/slop-audit.md` for what a script cannot judge: does the headline say what the thing is, does any element lose nothing if removed, is any section layout repeated, is copy plain.
 4. **Report** in three groups using `commands/audit/references/report-format.md`: errors, warnings, passes (one line). Each item is one line with the fix and which command fixes it (`commands/audit/tokens/severity.json`).
 5. **Ask one question** (`ask_user_input_v0`): fix all errors, fix selected items, or leave as is. Change nothing before the answer.
 6. **On a fix request,** hand off to the owning commands: color and font items to `/palette`, copy items to `/copy`, spacing and structure items to `/edit` (layout), responsive items to `/mobile`, accessibility items to `/a11y`. Each of those runs its own snapshot and post-hooks.
+
+## Limits
+
+The script is a static check. Which rules are checked automatically, which heuristically, and which need judgment is listed in `docs/audit-coverage.md`. Say so in the report when a pass depends on something the script cannot see (rendering, keyboard behavior, external CSS).
 
 ## Outputs
 

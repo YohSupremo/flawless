@@ -1,0 +1,108 @@
+{
+  "_comment": "Each bad fixture must produce these findings. Add a line here whenever you add a fixture. Strings are substrings of audit messages.",
+  "bad": {
+    "a11y.html": {
+      "errors": [
+        "low contrast: muted text",
+        "no lang attribute",
+        "<img> without alt",
+        "outline removed"
+      ],
+      "flags": [
+        "--a11y"
+      ]
+    },
+    "audit-before.html": {
+      "errors": [
+        "gradients",
+        "banned 230-300",
+        "middle dot",
+        "banned hero word",
+        "filler/placeholder",
+        "hero has 3 buttons"
+      ],
+      "warnings": [
+        "possible statistic",
+        "possible trust claim"
+      ],
+      "flags": [
+        "--a11y"
+      ]
+    },
+    "banned-words.html": {
+      "errors": [
+        "banned hero word/phrase: 'unleash'",
+        "'seamless'",
+        "'journey'"
+      ]
+    },
+    "emoji.html": {
+      "errors": [
+        "emoji in visible copy"
+      ]
+    },
+    "gradient.html": {
+      "errors": [
+        "gradients"
+      ]
+    },
+    "long-headline.html": {
+      "warnings": [
+        "headline has 14 words"
+      ],
+      "no_errors": true
+    },
+    "looping.html": {
+      "errors": [
+        "looping animation"
+      ]
+    },
+    "low-contrast.html": {
+      "errors": [
+        "low contrast: muted text on base"
+      ]
+    },
+    "mobile.html": {
+      "errors": [
+        "no viewport meta tag",
+        "no max-width media query"
+      ],
+      "warnings": [
+        "button padding under 12px"
+      ],
+      "flags": [
+        "--mobile"
+      ]
+    },
+    "no-reduced-motion.html": {
+      "errors": [
+        "no prefers-reduced-motion"
+      ]
+    },
+    "off-scale-spacing.html": {
+      "errors": [
+        "spacing off the scale"
+      ]
+    },
+    "pills.html": {
+      "errors": [
+        "pill/badge/tag"
+      ]
+    },
+    "slash-separator.html": {
+      "errors": [
+        "slash '/'"
+      ]
+    },
+    "three-buttons.html": {
+      "errors": [
+        "hero has 3 buttons"
+      ]
+    },
+    "violet.html": {
+      "errors": [
+        "banned 230-300 blue-violet range"
+      ]
+    }
+  }
+}

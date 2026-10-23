@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 """clean-ui audit: print a page's current scheme and list rule violations.
 
-Usage: python core/scripts/audit.py page.html [--json] [--a11y] [--mobile] [--avoid 'phrase one|phrase two']
+Usage: python core/scripts/audit.py page.html [--json] [--a11y] [--mobile] [--explain]
+                                    [--mode strict|balanced|brand-first] [--config flawless.config.json]
+                                    [--avoid 'phrase one|phrase two']
 Errors (hard rules) set exit code 1. Warnings (judgment calls) do not.
+
+--explain   add the design principle and a suggested fix under every finding.
+--mode      strictness preset (default strict). See docs/configuration.md.
+--config    project config file. Without the flag, flawless.config.json is looked up next to the
+            page and in its parent folders. Config can set the mode, brand colors, accessibility
+            target, and headline limit.
+
+What this script can and cannot check is listed in docs/audit-coverage.md.
 """
 import re, sys, json, colorsys
 
@@ -13,7 +23,68 @@ def load_rules():
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
+def _arg(flag):
+    return sys.argv[sys.argv.index(flag) + 1] if flag in sys.argv and sys.argv.index(flag) + 1 < len(sys.argv) else None
+
+def find_config(page=None):
+    explicit = _arg("--config")
+    if explicit:
+        return explicit
+    start = os.path.dirname(os.path.abspath(page)) if page else os.getcwd()
+    for _ in range(6):
+        cand = os.path.join(start, "flawless.config.json")
+        if os.path.isfile(cand):
+            return cand
+        parent = os.path.dirname(start)
+        if parent == start:
+            break
+        start = parent
+    return None
+
+MODES = {
+    # mode: (error prefixes demoted to warnings, rule overrides)
+    "strict": ((), {}),
+    "balanced": (("spacing off the scale", "pill/badge", "eyebrow"),
+                 {"hero.max_headline_words": 10, "color.banned_min_saturation": 0.35, "eyebrow.allowed_per_page": 2}),
+    "brand-first": (("color #", "hsl", "gradients", "spacing off the scale", "pill/badge", "eyebrow", "backdrop blur"),
+                    {"hero.max_headline_words": 12, "eyebrow.allowed_per_page": 3}),
+}
+
+def apply_overrides(rules, overrides):
+    for dotted, val in overrides.items():
+        node = rules
+        keys = dotted.split(".")
+        for k in keys[:-1]:
+            node = node[k]
+        node[keys[-1]] = val
+
+def load_config(page=None):
+    """Returns (config dict, path or None). A broken config file is reported, not ignored."""
+    path = find_config(page)
+    if not path:
+        return {}, None
+    try:
+        with open(path, encoding="utf-8") as f:
+            cfg = json.load(f)
+        if not isinstance(cfg, dict):
+            raise ValueError("top level must be an object")
+        return cfg, path
+    except (OSError, ValueError) as e:
+        sys.exit("config error in %s: %s" % (path, e))
+
 R = load_rules()
+_page_arg = next((a for a in sys.argv[1:] if a.endswith((".html", ".htm"))), None)
+CONFIG, CONFIG_PATH = load_config(_page_arg)
+MODE = _arg("--mode") or CONFIG.get("mode", "strict")
+if MODE not in MODES:
+    sys.exit("unknown mode '%s'; use one of: %s" % (MODE, ", ".join(MODES)))
+DEMOTE, _mode_over = MODES[MODE]
+apply_overrides(R, _mode_over)
+if str(CONFIG.get("accessibility_target", "AA")).upper() == "AAA":
+    R["contrast"]["text_min"] = max(R["contrast"]["text_min"], 7.0)
+if "max_headline_words" in CONFIG:
+    R["hero"]["max_headline_words"] = int(CONFIG["max_headline_words"])
+BRAND = {c.lstrip("#").lower() for c in CONFIG.get("brand_colors", [])}
 SCALE = set(R["spacing_scale_px"])
 BANNED_WORDS = R["banned_words"]
 FILLER = R["filler_text"]
@@ -66,6 +137,52 @@ def to_rgb(val, over=None):
         return c
     return None
 
+# (message prefix, principle, suggested fix). Used by --explain. Principles are defined in core/rules.md.
+EXPLAIN = [
+    ("gradients", "Flat color reads as deliberate; gradients are the most common sign of generated UI.", "Replace with a flat token color. For text over a photo, use a flat rgba overlay."),
+    ("color #", "Blue-violet hues are the default output of generated UI, so the range is banned.", "Pick a palette with /palette, or allow a brand color in flawless.config.json (brand_colors)."),
+    ("hsl", "Blue-violet hues are banned (see the color rule).", "Move the hue outside the banned range or register it as a brand color."),
+    ("visible copy contains", "Slashes, middle dots, bullets and em dashes are decorative separators; plain sentences carry meaning better.", "Rewrite with a period or the word 'and'."),
+    ("banned hero word", "Stock marketing phrases say nothing specific.", "Say what the thing is or does in plain words (/copy)."),
+    ("emoji in visible copy", "Emoji act as decoration, not information.", "Remove them or use real iconography the user supplied."),
+    ("filler/placeholder", "Placeholder text must never ship.", "Replace it with real copy or remove the element."),
+    ("spacing off the scale", "A small fixed scale keeps rhythm consistent.", "Use a --s1 to --s8 token or a value from the scale in core/tokens/rules.json."),
+    ("backdrop blur", "Glassmorphism is a banned effect.", "Use a flat, opaque surface."),
+    ("looping animation", "Endless motion competes with the content and fails reduced-motion users.", "Animate once, on entrance, and respect prefers-reduced-motion."),
+    ("pill/badge", "Filler tags add noise unless the user supplied them.", "Delete the element."),
+    ("hero has", "A hero has one job: a headline, one sentence, at most two buttons.", "Remove the extra buttons or paragraphs."),
+    ("headline has", "Short headlines are read; long ones are skimmed.", "Cut to the core claim (/copy headline)."),
+    ("eyebrow", "Eyebrow labels usually repeat the headline.", "Remove it unless it carries new information."),
+    ("motion present with no prefers-reduced-motion", "Some people get ill from motion; the OS setting must be honoured.", "Add @media (prefers-reduced-motion: reduce) { * { animation: none; transition: none; } }"),
+    ("low contrast", "WCAG contrast keeps text readable.", "Darken or lighten the text or background (/palette or /a11y)."),
+    ("a11y: <html> has no lang", "Screen readers pick pronunciation from the lang attribute.", "Add lang=\"en\" (or the right language) to <html>."),
+    ("a11y: <img> without alt", "Images need a text alternative.", "Add alt text, or alt=\"\" for decorative images."),
+    ("a11y: outline removed", "Keyboard users need a visible focus indicator.", "Add a :focus-visible style."),
+    ("mobile: no viewport", "Without the viewport tag phones render a shrunken desktop page.", "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">."),
+    ("mobile: no max-width media query", "The layout will not adapt to small screens.", "Add a max-width media query for the phone layout (/mobile)."),
+    ("mobile: font sizes", "Small text is hard to read on phones.", "Use 14px or larger."),
+    ("mobile: button padding", "Tap targets under 44px are easy to miss.", "Increase button padding."),
+    ("possible statistic", "Invented numbers destroy trust.", "Keep it only if the user supplied it."),
+    ("possible trust claim", "Unverified trust claims are made up in most generated pages.", "Remove unless real and supplied."),
+    ("possible second accent", "One accent color keeps the page focused.", "Reduce to a single accent hue."),
+    ("no <h1>", "Every page needs one main heading.", "Add an <h1>."),
+    ("transition: all", "Animating every property is wasteful and can cause layout jank.", "List opacity and transform."),
+    ("animation/transition of", "Long motion feels slow.", "Keep durations at or under the limit in rules.json."),
+    ("keyframes animate", "Layout and paint properties cause jank.", "Animate opacity, transform or clip-path only."),
+]
+
+def explain(msg):
+    for prefix, why, fix in EXPLAIN:
+        if msg.startswith(prefix) or prefix in msg:
+            return {"principle": why, "fix": fix}
+    return None
+
+def show_explain(msg, out):
+    if "explanations" in out and msg in out["explanations"]:
+        e = out["explanations"][msg]
+        print("      why:", e["principle"])
+        print("      fix:", e["fix"])
+
 def main(path):
     html = open(path, encoding="utf-8").read()
     css = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", html, re.S))
@@ -99,6 +216,8 @@ def main(path):
     hexes = sorted(set(re.findall(r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b", css)))
     for hx in hexes:
         h, s, l = hls(hx)
+        if hx.lower() in BRAND or (len(hx) == 3 and "".join(c * 2 for c in hx).lower() in BRAND):
+            continue
         if s > HUE_SAT and HUE_LO <= h <= HUE_HI:
             errors.append(f"color #{hx}: hue {h} is in the banned %d-%d blue-violet range" % (HUE_LO, HUE_HI) + "")
     for fn, args in re.findall(r"(hsla?)\(\s*([^)]*)\)", css):
@@ -206,6 +325,8 @@ def main(path):
     sat = []
     for hx in hexes:
         h, s, l = hls(hx)
+        if hx.lower() in BRAND:
+            continue
         if s >= 0.45 and 0.15 <= l <= 0.85:
             sat.append(h)
     clusters = []
@@ -264,8 +385,20 @@ def main(path):
         if re.search(r"overflow-x\s*:\s*scroll", css) and "body" in css:
             warnings.append("mobile: check for horizontal scroll on body")
 
+    # mode: some hard rules become warnings (never contrast, accessibility, or reduced-motion rules)
+    if DEMOTE:
+        kept = []
+        for e in errors:
+            (warnings if any(d in e for d in DEMOTE) else kept).append(e)
+        errors = kept
+
     scheme["visible_copy"] = text[:300]
+    scheme["mode"] = MODE
+    if CONFIG_PATH:
+        scheme["config"] = CONFIG_PATH
     out = {"scheme": scheme, "errors": errors, "warnings": warnings}
+    if "--explain" in sys.argv:
+        out["explanations"] = {m: explain(m) for m in errors + warnings if explain(m)}
     if "--json" in sys.argv:
         print(json.dumps(out, indent=2))
     else:
@@ -275,10 +408,12 @@ def main(path):
         print("ERRORS" if errors else "NO ERRORS")
         for p in errors:
             print("  -", p)
+            show_explain(p, out)
         if warnings:
             print("WARNINGS")
             for p in warnings:
                 print("  -", p)
+                show_explain(p, out)
     sys.exit(1 if errors else 0)
 
 if __name__ == "__main__":

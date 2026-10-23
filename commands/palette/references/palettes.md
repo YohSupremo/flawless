@@ -1,3 +1,5 @@
+<!-- GENERATED FILE. Do not edit by hand: edit manifest.json (or the token file named below), then run python core/scripts/build.py. CI fails if this file is out of date. -->
+
 # Palettes
 
 Generated from `commands/palette/tokens/palettes.json`. Every palette passes `core/scripts/palette.py`: no hue in 230 to 300, text contrast at least 4.5:1, accent marker at least 3.0:1, button text at least 4.5:1. Every base is a flat color.

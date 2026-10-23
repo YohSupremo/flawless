@@ -22,7 +22,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/mobile/references/mobile-checklist.md`, `commands/mobile/tokens/breakpoints.css` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `commands/mobile/references/mobile-checklist.md`, `commands/mobile/tokens/breakpoints.css`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py` |
 | Calls | none |
 | Called by | `/edit`, `/section` |
@@ -46,6 +46,10 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 - Same content on every screen size. Do not hide or add content per breakpoint.
 - Wide content (tables, code) scrolls inside its own container; the page body never scrolls sideways.
 - Honor safe-area insets on fixed or sticky bars.
+
+## Preview mode
+
+`/mobile --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

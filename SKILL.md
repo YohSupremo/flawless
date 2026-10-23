@@ -15,12 +15,15 @@ The look it produces: a full-bleed photo or flat base, one accent color, a heavy
 clean-ui/
 ├── SKILL.md              this router
 ├── manifest.json         every command, what it reads, calls, writes (source of truth)
+├── INSTALL.md, docs/     installation, audit coverage, configuration, guidance (for people, not read per command)
+├── examples/, tests/     sample pages and the test suite
 ├── core/                 shared by all commands
 │   ├── rules.md          design rules: color, type, symbols, information, copy, spacing
 │   ├── workflow.md       how a page is built
 │   ├── delivery.md       how work is handed back
 │   ├── hooks.md          snapshot before, audit and state after
 │   ├── state.md          session scheme shared across commands
+│   ├── preview.md        --preview (dry run) rules shared by file-changing commands
 │   ├── graph.md          generated map of how commands connect
 │   ├── tokens/           rules.json (all thresholds) and base.css (token names)
 │   └── scripts/          audit, palette, snapshot, state, extract_palette, analyze_layout, build, validate
@@ -62,6 +65,9 @@ The map of who calls whom is in `core/graph.md`.
 
 ## Rules that apply everywhere
 
+- **Preview on request.** `--preview` on a command that supports it shows the change and the resulting audit without writing anything (`core/preview.md`). `/audit --explain` explains each finding.
+- **Project settings.** If a `flawless.config.json` exists next to the page, the audit applies its mode, brand colors, and accessibility target (`docs/configuration.md`). Tell the user when a mode relaxed a rule.
+- **Say what the audit cannot see.** A clean script audit is not a full review. See `docs/audit-coverage.md`.
 - **Scheme stays.** No command changes colors, fonts, radius, or spacing as a side effect. Only `/palette`, `/match`, the colors and fonts category of `/edit`, and `/flawless` setup write the scheme.
 - **Rules are defaults, not vetoes.** If a request breaks one, ask keep-or-override once, then follow the answer and remember it for the conversation.
 - **Never invent facts.** No made-up statistics, reviews, prices, hours, or addresses.

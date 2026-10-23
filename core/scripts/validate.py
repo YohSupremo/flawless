@@ -125,6 +125,20 @@ for dp, _, fs in os.walk(ROOT):
             for ref in set(re.findall(r"`((?:core|commands)/[\w./-]+\.(?:md|json|css|html|py))`", t)):
                 if not exists(ref): err(f"{os.path.relpath(os.path.join(dp, f), ROOT)} mentions missing path {ref}")
 
+# 10. help metadata, generated-file notices, license
+for n, c in CMDS.items():
+    for k in ("needs_target", "confirms", "supports_preview", "output", "common_failures", "related"):
+        if k not in c: err(f"{n}: manifest entry missing help field '{k}'")
+    for t in c.get("related", []):
+        if t not in names: err(f"{n}: related unknown command '{t}'")
+    if c.get("supports_preview") and "core/preview.md" not in c["reads"]:
+        err(f"{n}: supports_preview but does not read core/preview.md")
+for rel in ("core/graph.md", "commands/flawless-c/tokens/command-table.md", "commands/palette/references/palettes.md"):
+    if "GENERATED FILE" not in open(os.path.join(ROOT, rel), encoding="utf-8").read(400):
+        err(f"{rel}: missing the GENERATED FILE notice at the top")
+if not any(exists(f) for f in ("LICENSE", "LICENSE.md", "LICENSE.txt")):
+    warn("no LICENSE file")
+
 for w in warns: print("WARN ", w)
 for e in errors: print("ERROR", e)
 print(f"\n{len(CMDS)} commands checked: {len(errors)} errors, {len(warns)} warnings")

@@ -63,20 +63,35 @@ def write_wiring():
         if s2 != s:
             open(p, "w", encoding="utf-8").write(s2)
 
+GENERATED = "<!-- GENERATED FILE. Do not edit by hand: edit manifest.json (or the token file named below), then run python core/scripts/build.py. CI fails if this file is out of date. -->\n"
+
+def yn(b):
+    return "yes" if b else "no"
+
 def command_table():
-    rows = ["| Command | What it does | Example |", "|---|---|---|"]
+    rows = [GENERATED.rstrip("\n"), "", "| Command | What it does | Example |", "|---|---|---|"]
     order = ["flawless", "flawless-c"] + [k for k in CMDS if k not in ("flawless", "flawless-c", "help")]
     for n in order:
         c = CMDS[n]
         rows.append("| `/%s` | %s | %s |" % (n, c["description"], c["example"]))
         for a in c.get("aliases", []):
             rows.append("| `/%s` | Same as `/%s` | `/%s` |" % (a, n, a))
+    rows += ["", "## Command details", "",
+             "| Command | Changes files | Needs a page | Asks to confirm | Preview mode | Related | Typical output |",
+             "|---|---|---|---|---|---|---|"]
+    for n in order:
+        c = CMDS[n]
+        rows.append("| `/%s` | %s | %s | %s | %s | %s | %s |" % (n, yn(c["modifies_files"]), yn(c["needs_target"]), yn(c["confirms"]),
+                    yn(c["supports_preview"]), cmdref(c["related"]), c["output"]))
+    rows += ["", "## Common failure cases", ""]
+    for n in order:
+        rows.append("- `/%s`: %s" % (n, "; ".join(CMDS[n]["common_failures"])))
     return "\n".join(rows) + "\n"
 
 def palettes_md():
     P = json.load(open(os.path.join(ROOT, "commands/palette/tokens/palettes.json"), encoding="utf-8"))["palettes"]
     R = json.load(open(os.path.join(ROOT, "core/tokens/rules.json"), encoding="utf-8"))
-    out = ["# Palettes", "",
+    out = [GENERATED.rstrip("\n"), "", "# Palettes", "",
            "Generated from `commands/palette/tokens/palettes.json`. Every palette passes `core/scripts/palette.py`: no hue in %d to %d, text contrast at least %s:1, accent marker at least %s:1, button text at least %s:1. Every base is a flat color."
            % (R["color"]["banned_hue_min"], R["color"]["banned_hue_max"], R["contrast"]["text_min"], R["contrast"]["marker_min"], R["contrast"]["button_text_min"]),
            "", "| Name | Base | Text | Accent | Button text | Suits | Text on base | Accent on base | Button on accent |",
@@ -90,7 +105,7 @@ def palettes_md():
     return "\n".join(out) + "\n"
 
 def graph_md():
-    L = ["# Command graph", "",
+    L = [GENERATED.rstrip("\n"), "", "# Command graph", "",
          "Generated from `manifest.json`. Solid arrows are calls (one command runs another). Dashed arrows are hand-offs (control passes after the user decides). `requires` means the other command's data must exist.", "",
          "```mermaid", "flowchart LR"]
     for n, c in CMDS.items():

@@ -7,3 +7,5 @@
 - `/flawless` makes every command available without further setup and applies the rules to ordinary requests too.
 - Commands never change colors, fonts, radius, or spacing unless the command is about the scheme (`/palette`, or the colors category of `/edit`).
 - Every command that changes a file saves a snapshot first, so `/revert` can undo it.
+- Commands marked "Preview mode: yes" accept `--preview` to show a change before making it (`core/preview.md`). `/audit --explain` explains each finding.
+- The table is followed by per-command details: whether it changes files, needs a page, asks to confirm, what it typically outputs, and how it commonly fails.

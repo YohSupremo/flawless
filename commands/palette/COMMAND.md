@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/state.md`, `commands/palette/references/palettes.md`, `commands/palette/references/palette-rules.md`, `commands/palette/tokens/palettes.json` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/state.md`, `commands/palette/references/palettes.md`, `commands/palette/references/palette-rules.md`, `commands/palette/tokens/palettes.json`, `core/preview.md` |
 | Scripts | `core/scripts/palette.py`, `core/scripts/state.py`, `core/scripts/image_harmony.py` |
 | Calls | none |
 | Called by | `/edit`, `/flawless`, `/match`, `/new`, `/ref` |
@@ -47,6 +47,10 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 4. **Present** three options with hex values and contrast (text on base, accent on base, button text on accent). Mark the recommended one. Use `ask_user_input_v0` to let the user choose, or accept their own hex values.
 5. **Failing choice.** If a color fails, say which check failed and offer the nearest passing adjustment (see `commands/palette/references/palette-rules.md`). If the user's brand color is blue-violet, ask keep-or-override.
 6. **Apply** (apply mode only). Pre-hook snapshot. Change only the color tokens. Update the session scheme with `state.py set`. Post-hooks: audit, state, report.
+
+## Preview mode
+
+`/palette --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 

@@ -23,7 +23,7 @@ _Generated from `manifest.json` by `core/scripts/build.py`. Edit the manifest, n
 | Modifies files | yes |
 | Pre-hooks | `snapshot` |
 | Post-hooks | `audit`, `state`, `report` |
-| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/tokens/motion.css`, `commands/animate/references/motion-catalog.md`, `commands/animate/tokens/animations.css`, `commands/animate/tokens/scroll-reveal.js` |
+| Reads | `core/rules.md`, `core/tokens/rules.json`, `core/tokens/motion.css`, `commands/animate/references/motion-catalog.md`, `commands/animate/tokens/animations.css`, `commands/animate/tokens/scroll-reveal.js`, `core/preview.md` |
 | Scripts | `core/scripts/audit.py` |
 | Calls | none |
 | Called by | `/edit` |
@@ -53,6 +53,10 @@ Image motion is only offered when the page has a photo or illustration. Do not a
 5. **Add the chosen patterns** from `commands/animate/tokens/animations.css`; for scroll reveal also add `commands/animate/tokens/scroll-reveal.js`. Use only the patterns for the chosen areas. Catalog and rules: `commands/animate/references/motion-catalog.md`.
 6. **Check limits:** one entrance per element, stagger at most 120ms, durations 120 to 700ms, only opacity, transform, clip-path.
 7. **Post-hooks:** audit with `--a11y --mobile`, state, report in one or two sentences naming what animates and the pace.
+
+## Preview mode
+
+`/animate --preview ...` shows the proposed change and its audit result without writing anything, then asks whether to apply it. Full rules: `core/preview.md`.
 
 ## Outputs
 
